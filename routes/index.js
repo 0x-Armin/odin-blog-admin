@@ -2,12 +2,11 @@ const axios = require("axios");
 const { body, validationResult } = require("express-validator");
 
 var express = require("express");
-const { locals } = require("../app");
 var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Blog Admin" });
+  res.render("index", { title: "Blog Admin", token: req.session.token });
 });
 
 router.get("/signup", function (req, res, next) {
@@ -76,11 +75,12 @@ router.post("/login", [
       .post("http://localhost:3000/users/login", user)
       .then((response) => {
         const token = response.data.token;
-        localStorage.setItem("token", token);
-        res.redirect("/");
+        req.session.token = token;
+        res.render("index", {token: token});
       })
       .catch((err) => {
-        res.redirect("/");
+        const error = err.response.data.message;
+        res.render("index", {error: error});
       });
   },
 ]);
