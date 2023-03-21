@@ -1,2 +1,14 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+<h2>Please log in</h2>
+  <form action="/login" method="post">
+    <label>
+      Email:
+      <input name="email" type="text" />
+    </label>
+    <label>
+      Password:
+      <input name="password" type="password" />
+    </label>
+    <button>Log in</button>
+  </form>

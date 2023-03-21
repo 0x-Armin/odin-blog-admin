@@ -1,22 +1,21 @@
-const axios = require('axios');
+const axios = require("axios");
 const { body, validationResult } = require("express-validator");
 
-var express = require('express');
+var express = require("express");
+const { locals } = require("../app");
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Blog Admin" });
 });
 
-router.get('/signup', function(req, res, next) {
-  res.render('sign-up-form', { title: 'Sign up'});
+router.get("/signup", function (req, res, next) {
+  res.render("sign-up-form", { title: "Sign up" });
 });
 
-router.post('/signup', [
-  body("email", "Email must not be empty.")
-    .trim()
-    .isEmail(),
+router.post("/signup", [
+  body("email", "Email must not be empty.").trim().isEmail(),
   body("password", "Password must not be empty.")
     .trim()
     .isLength({ min: 1 })
@@ -32,8 +31,8 @@ router.post('/signup', [
     const user = { email: req.body.email, password: req.body.password };
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.render('sign-up-form', {
-        title: 'Sign up',
+      res.render("sign-up-form", {
+        title: "Sign up",
         user,
         errors: errors.array(),
       });
@@ -41,15 +40,49 @@ router.post('/signup', [
     }
 
     // Valid form fields, call API to save
-    axios.post('http://localhost:3000/users/signup', user)
-      .then(response => {
+    axios
+      .post("http://localhost:3000/users/signup", user)
+      .then((response) => {
         res.redirect("/");
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.redirect("/");
       });
-  }
+  },
+]);
+
+router.post("/login", [
+  body("email", "Email must not be empty.").trim().isEmail(),
+  body("password", "Password must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  async (req, res, next) => {
+    const user = { email: req.body.email, password: req.body.password };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("index", {
+        title: "Log in",
+        user,
+        errors: errors.array(),
+      });
+      return;
+    }
+
+    // Valid form fields, call API to save
+    axios
+      .post("http://localhost:3000/users/login", user)
+      .then((response) => {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        res.redirect("/");
+      })
+      .catch((err) => {
+        res.redirect("/");
+      });
+  },
 ]);
 
 module.exports = router;
