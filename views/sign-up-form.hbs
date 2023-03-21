@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign-up</title>
+  </head>
+  <body>
+    <h1>Sign up</h1>
+    <form action="" method="POST">
+      <label>
+        Email:
+        {{#if user.email}}
+        <input type="text" name="email" value="{{user.email}}"/>
+        {{else}}
+        <input type="text" name="email" />
+        {{/if}}
+      </label>
+      <label>
+        Password:
+        <input type="password" name="password" />
+      </label>
+      <label>
+        Confirm password:
+        <input type="password" name="passwordCfm" />
+      </label>
+
+      <input type="submit" value="Sign up" />
+    </form>
+
+    {{#if errors}}
+    <ul>
+      {{#each errors}}
+      <li>{{this.msg}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </body>
+</html>
