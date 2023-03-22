@@ -58,6 +58,8 @@ router.post("/login", [
     .isLength({ min: 1 })
     .escape(),
 
+
+  // Log in
   async (req, res, next) => {
     const user = { email: req.body.email, password: req.body.password };
     const errors = validationResult(req);
@@ -70,18 +72,43 @@ router.post("/login", [
       return;
     }
 
+    // Log in user to get token
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/users/login', 
+        user
+      );
+      const token = response.data.token;
+
+      // Request for full list of blog posts with token
+      const blogPostsRes = await axios.get(
+        'http://localhost:3000/posts/admin', { 
+          headers: {
+            'Authorization': `Bearer ${token}`
+          } 
+        }
+      );
+      const blogPosts = blogPostsRes.data;
+
+      res.render("index", { blogPosts, token });
+    } catch (err) {
+      console.error(err);
+      const error = err.response ? err.response.data.message : "Unknown error";
+      res.render("index", { error });
+    }
+
     // Valid form fields, call API to save
-    axios
-      .post("http://localhost:3000/users/login", user)
-      .then((response) => {
-        const token = response.data.token;
-        req.session.token = token;
-        res.render("index", {token: token});
-      })
-      .catch((err) => {
-        const error = err.response.data.message;
-        res.render("index", {error: error});
-      });
+    // axios
+    //   .post("http://localhost:3000/users/login", user)
+    //   .then((response) => {
+    //     const token = response.data.token;
+    //     req.session.token = token;
+    //     res.render("index", {token: token});
+    //   })
+    //   .catch((err) => {
+    //     const error = err.response.data.message;
+    //     res.render("index", {error: error});
+    //   });
   },
 ]);
 

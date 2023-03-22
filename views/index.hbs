@@ -1,21 +1,41 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 {{#if token}}
-<h2>Blog posts</h2>
+  <h2>Blog posts</h2>
+  {{#if blogPosts}}
+    <ul>
+    {{#each blogPosts}}
+      <li>
+        <h3><a href={{this.url}}>{{this.title}}</a></h3>
+        <p>{{this.date_formatted}}</p>
+        <p>Published: {{this.isPublished}}</p>
+        <label class="switch">
+          {{#isPublished this.isPublished}}
+            <input type="checkbox" checked>
+          {{else}}
+            <input type="checkbox" >
+          {{/isPublished}}
+          <span class="slider"></span>
+        </label>
+      </li>
+    {{/each}}
+    </ul>
+  {{/if}}
+
 {{else}}
-<h2>Please log in</h2>
-<form action="/login" method="post">
-  <label>
-    Email:
-    <input name="email" type="text" />
-  </label>
-  <label>
-    Password:
-    <input name="password" type="password" />
-  </label>
-  <button>Log in</button>
-</form>
-{{#if error}}
-<p>{{error}}</p>
-{{/if}}
+  <h2>Please log in</h2>
+  <form action="/login" method="post">
+    <label>
+      Email:
+      <input name="email" type="text" />
+    </label>
+    <label>
+      Password:
+      <input name="password" type="password" />
+    </label>
+    <button>Log in</button>
+  </form>
+  {{#if error}}
+    <p>{{error}}</p>
+  {{/if}}
 {{/if}}

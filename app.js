@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 const session = require("express-session");
 const passport = require("passport");
+const handlebars = require("hbs");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -49,5 +50,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+handlebars.registerHelper('isPublished', function (value, options) {
+  return value === true ? options.fn(this) : options.inverse(this);
+});
+
 
 module.exports = app;
