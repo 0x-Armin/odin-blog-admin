@@ -1,5 +1,14 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+ <p>Welcome to {{title}}</p>
 {{#if token}}
   <h2>Blog posts</h2>
   {{#if blogPosts}}
@@ -11,14 +20,15 @@
         <p>Published: {{this.isPublished}}</p>
         <label class="switch">
           {{#isPublished this.isPublished}}
-            <input type="checkbox" checked>
+            <input class="togglePublishBtn" type="checkbox" value="{{this.id}}" checked>
           {{else}}
-            <input type="checkbox" >
+            <input class="togglePublishBtn" value="{{this.id}}" type="checkbox" >
           {{/isPublished}}
           <span class="slider"></span>
         </label>
       </li>
     {{/each}}
+      <script src="../js/client.js"></script>
     </ul>
   {{/if}}
 
@@ -38,4 +48,7 @@
   {{#if error}}
     <p>{{error}}</p>
   {{/if}}
-{{/if}}
+{{/if}} 
+</body>
+</html>
+

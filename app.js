@@ -35,6 +35,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// Use script in handlebars
+app.use('/js', express.static(__dirname + '/js'));
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -51,6 +54,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Handlebars
 handlebars.registerHelper('isPublished', function (value, options) {
   return value === true ? options.fn(this) : options.inverse(this);
 });
