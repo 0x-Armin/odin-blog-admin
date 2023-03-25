@@ -97,5 +97,30 @@ exports.login_post = [
 ];
 
 exports.toggle_publish_post = async (req, res, next) => {
-  console.log(req.session.token);
+  const token = req.session.token;
+  const postId = req.body.postId;
+
+  try {
+    const blogPostsRes = await axios.put(
+      `http://localhost:3000/posts/${postId}/togglePublish`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const blogPosts = blogPostsRes.data;
+    res.render("index", { blogPosts, token });
+  } catch (err) {
+    console.error(err);
+    const error = err.response ? err.response.data.message : "Unknown error";
+    res.render("index", { error });
+  }
+
+
+  // Duplicate what is done above 
+  // 1. Post token along with post id (to update isPublished on API side)
+  // 2. Retrieve update blogPostRes and re-render
 };

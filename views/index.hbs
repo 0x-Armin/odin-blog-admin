@@ -18,17 +18,16 @@
         <h3><a href={{this.url}}>{{this.title}}</a></h3>
         <p>{{this.date_formatted}}</p>
         <p>Published: {{this.isPublished}}</p>
-        <label class="switch">
+        <form method="post" action="/togglePublish">
+          <input type="hidden" name="postId" required="true" value={{this.id}} />
           {{#isPublished this.isPublished}}
-            <input class="togglePublishBtn" type="checkbox" value="{{this.id}}" checked>
+            <button class="toggle-btn on" type="submit"></button>
           {{else}}
-            <input class="togglePublishBtn" value="{{this.id}}" type="checkbox" >
+            <button class="toggle-btn" type="submit"></button>
           {{/isPublished}}
-          <span class="slider"></span>
-        </label>
+        </form>
       </li>
     {{/each}}
-      <script src="../js/client.js"></script>
     </ul>
   {{/if}}
 
