@@ -1,0 +1,15 @@
+<h1>{{post.title}}</h1>
+<p>{{post.date_formatted}}</p>
+<p>{{{content}}}</p>
+
+{{#if comments}}
+<ul>
+  {{#each comments}}
+    <li>
+      <h4>{{this.username}}</h4>
+      <p>{{this.date_formatted}}</p>
+      <p>{{this.content}}</p>
+    </li>
+  {{/each}}
+</ul>
+{{/if}}
