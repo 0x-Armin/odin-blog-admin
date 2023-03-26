@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '#mytextarea'
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1>Create new post</h1>
+
+    {{#if errors}}
+    <ul>
+      {{#each errors}}
+      <li>{{this.msg}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+
+    <form method="post">
+      <label>
+        Title:
+        {{#if title}}
+        <input type="text" name="title" value="{{title}}">
+        {{else}}
+        <input type="text" name="title">
+        {{/if}}
+      </label>
+      {{#if content}}
+      <textarea name="content" id="mytextarea">{{{content}}}</textarea>
+      {{else}}
+      <textarea name="content" id="mytextarea"></textarea>
+      {{/if}}
+      <input type="submit" value="Create post"> 
+    </form>
+  </body>
+</html>

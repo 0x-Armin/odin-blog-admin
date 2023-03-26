@@ -118,9 +118,56 @@ exports.toggle_publish_post = async (req, res, next) => {
     const error = err.response ? err.response.data.message : "Unknown error";
     res.render("index", { error });
   }
-
-
-  // Duplicate what is done above 
-  // 1. Post token along with post id (to update isPublished on API side)
-  // 2. Retrieve update blogPostRes and re-render
 };
+
+exports.new_post_get = (req, res, next) => {
+  res.render("new-post-form");
+}
+
+exports.new_post_post = [
+  body("title", "Title must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("content", "Content must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("new-post-form", {
+        title: req.body.title,
+        content: req.body.content,
+        errors: errors.array(),
+      });
+      return;
+    }
+
+    const token = req.session.token;
+
+    try {
+      const blogPostsRes = await axios.post(
+        "http://localhost:3000/posts/new",
+        {
+          title: req.body.title,
+          content: req.body.content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+  
+      const blogPosts = blogPostsRes.data;
+      res.render("index", { blogPosts, token });
+    } catch (err) {
+      console.error(err);
+      const error = err.response ? err.response.data.message : "Unknown error";
+      res.render("index", { error });
+    } 
+  }
+]

@@ -14,4 +14,7 @@ router.post("/login", index_controller.login_post);
 
 router.post("/togglePublish", index_controller.toggle_publish_post);
 
+router.get("/new-post", index_controller.new_post_get);
+router.post("/new-post", index_controller.new_post_post);
+
 module.exports = router;
