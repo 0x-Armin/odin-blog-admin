@@ -1,6 +1,5 @@
 const axios = require("axios");
 const { body, validationResult } = require("express-validator");
-const validator = require("validator");
 
 exports.home = function (req, res, next) {
   res.render("index", { title: "Blog Admin", token: req.session.token });
@@ -109,7 +108,7 @@ exports.toggle_publish_post = async (req, res, next) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      },
+      }
     );
 
     const blogPosts = blogPostsRes.data;
@@ -126,13 +125,8 @@ exports.new_post_get = (req, res, next) => {
 };
 
 exports.new_post_post = [
-  body("title", "Title must not be empty")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("content", "Content must not be empty")
-    .trim()
-    .isLength({ min: 1 }),
+  body("title", "Title must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("content", "Content must not be empty").trim().isLength({ min: 1 }),
 
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -160,17 +154,17 @@ exports.new_post_post = [
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
-  
+
       const blogPosts = blogPostsRes.data;
       res.render("index", { blogPosts, token });
     } catch (err) {
       console.error(err);
       const error = err.response ? err.response.data.message : "Unknown error";
       res.render("index", { error });
-    } 
-  }
+    }
+  },
 ];
 
 exports.each_post_get = async (req, res, next) => {
@@ -185,7 +179,7 @@ exports.each_post_get = async (req, res, next) => {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
+    );
 
     const postData = postRes.data;
     res.render("each-post", {
@@ -195,7 +189,7 @@ exports.each_post_get = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     const error = err.response ? err.response.data.message : "Unknown error";
-    res.render("index", { error }); 
+    res.render("index", { error });
   }
 };
 
@@ -210,7 +204,7 @@ exports.comment_delete = async (req, res, next) => {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
+    );
 
     const postData = postRes.data;
     res.render("each-post", {
@@ -220,6 +214,6 @@ exports.comment_delete = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     const error = err.response ? err.response.data.message : "Unknown error";
-    res.render("index", { error }); 
+    res.render("index", { error });
   }
-}
+};
