@@ -188,10 +188,33 @@ exports.each_post_get = async (req, res, next) => {
     )
 
     const postData = postRes.data;
-    const content = postData.post.content.replace(/(<([^>]+)>)/gi, '');
     res.render("each-post", {
       post: postData.post,
-      content: content,
+      comments: postData.comments,
+    });
+  } catch (err) {
+    console.error(err);
+    const error = err.response ? err.response.data.message : "Unknown error";
+    res.render("index", { error }); 
+  }
+};
+
+exports.comment_delete = async (req, res, next) => {
+  const token = req.session.token;
+
+  try {
+    const postRes = await axios.delete(
+      `http://localhost:3000/comments/${req.params.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+
+    const postData = postRes.data;
+    res.render("each-post", {
+      post: postData.post,
       comments: postData.comments,
     });
   } catch (err) {

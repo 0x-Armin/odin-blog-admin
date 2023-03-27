@@ -1,6 +1,6 @@
 <h1>{{post.title}}</h1>
 <p>{{post.date_formatted}}</p>
-<p>{{{content}}}</p>
+<p>{{{post.content}}}</p>
 
 {{#if comments}}
 <ul>
@@ -9,6 +9,7 @@
       <h4>{{this.username}}</h4>
       <p>{{this.date_formatted}}</p>
       <p>{{this.content}}</p>
+      <a href={{this.url_del}}>Delete</a>
     </li>
   {{/each}}
 </ul>
